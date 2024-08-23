@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: parallel-example
+spec:
+  entrypoint: parallel-tasks
+  templates:
+  - name: parallel-tasks
+    steps:
+    - - name: parallel-step-1
+        template: run-task
+      - name: parallel-step-2
+        template: run-task
+
+  - name: run-task
+    container:
+      image: nginx:latest
+      command: ["echo", "-c", "your-task-command"]
