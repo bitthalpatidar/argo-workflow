@@ -1,0 +1,66 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: deployment-workflow-seq
+spec:
+  entrypoint: deploy-app
+  templates:
+  - name: deploy-app
+    steps:
+    - - name: apply-deployments
+        template: kubectl-apply
+        withSequence:
+          count: "3"  # Number of deployments or versions
+        arguments:
+          parameters:
+          - name: manifest
+            value: |
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: my-app-{{item}}
+              spec:
+                replicas: {{item}}  # Change replicas based on sequence item
+                selector:
+                  matchLabels:
+                    app: my-app-{{item}}
+                template:
+                  metadata:
+                    labels:
+                      app: my-app-{{item}}
+                  spec:
+                    containers:
+                    - name: my-app-container
+                      image: nginx:latest
+                      ports:
+                      - containerPort: 80
+
+    - - name: apply-services
+        template: kubectl-apply
+        withSequence:
+          count: "3"  # Number of services, should match deployments
+        arguments:
+          parameters:
+          - name: manifest
+            value: |
+              apiVersion: v1
+              kind: Service
+              metadata:
+                name: my-app-service-{{item}}
+              spec:
+                selector:
+                  app: my-app-{{item}}
+                ports:
+                - protocol: TCP
+                  port: 80
+                  targetPort: 80
+                type: ClusterIP  # Changed from LoadBalancer to ClusterIP
+
+  - name: kubectl-apply
+    inputs:
+      parameters:
+      - name: manifest
+    container:
+      image: bitnami/kubectl:latest
+      command: [sh, -c]
+      args: ["echo \"{{inputs.parameters.manifest}}\" | kubectl apply -f -"]
