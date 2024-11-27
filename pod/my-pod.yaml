@@ -7,6 +7,6 @@ metadata:
 spec:
   containers:
     - name: nginx
-      image: nginx:latestx
+      image: nginx:latest
       ports:
-        - containerPort: 80
+        - containerPort: "biithaal"
