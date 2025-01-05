@@ -1,7 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generaterName: wf-container
+  generaterName: wf-container-
+  namespace: argo
 spec:
   entrypoint: container-template
   templates:
