@@ -1,14 +1,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generaterName: wf-container-
-  namespace: argo
+  name: container-template-wf
+  #namespace: argo
 spec:
   entrypoint: container-template
   templates:
     - name: container-template
       container:
         image: python:3.8-slim
-        command: [python]
-        source: |
-        printf("hi team, this workflow for container templates")
+        args: [echo, "print('hi team, this workflow for container templates')"]

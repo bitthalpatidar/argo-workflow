@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: hello-argo-workflow  # Use a fixed name
+spec:
+  entrypoint: hello-world    # Main entry point for the workflow
+  templates:
+  - name: hello-world        # Template name
+    container:               # Define a container to run the task
+      image: alpine:latest   # Use Alpine Linux as the base image
+      command: [sh, -c]      # Run a shell command
+      args: ["echo 'Hello, Argo!'"]
+
