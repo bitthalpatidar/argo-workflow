@@ -1,7 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: container-template-wf
+  name: bp-container-template-wf
+
   #namespace: argo
 spec:
   entrypoint: container-template
