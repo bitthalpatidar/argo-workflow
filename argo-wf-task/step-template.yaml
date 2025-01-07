@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+    name: bp-steps-template-serial
+spec:
+    entrypoint: step-template
+    templates:
+        - name: step-template
+          steps:
+            - - name: step1
+                template: print-message
+            - - name: step2
+                template: print-message
+        - name: print-message
+          container:
+            image: python:3.8-slim
+            command: [echo]
+            args: ["this is step template"]

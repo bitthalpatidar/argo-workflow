@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+    name: bp-suspend-wf
+spec:
+    entrypoint: suspend-templ
+    templates:
+        - name: suspend-templ
+          steps:
+              - - name: step1
+                  template: wf-suspend
+              - - name: step2
+                  template: wf-suspend
+              - - name: step3
+                  template: wf-suspend
+                - name: step4
+                  template: wf-suspend
+              - - name: dely
+                  template: dely-temp
+              - - name: step5
+                  template: wf-suspend 
+        - name: wf-suspend
+          script:
+            image: python:3.8-slim
+            command: [python]
+            sourece: |
+             print("hi team this is suspend-templ")
+        - name: dely-temp
+          suspend:
+            duration: "10s"
+       
+
