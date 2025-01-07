@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: bp-container-temp-wf-
+spec:
+  entrypoint: container-temp
+  templates:
+    - name: container-temp
+      steps:
+        - - name: step1
+            template: print-temp
+        - - name: step2
+            template: print-temp
+    - name: print-temp
+      container:
+        image: python:3.8-slim
+        command: [echo]
+        args: ["hi team, this workflow for container templates"]
+

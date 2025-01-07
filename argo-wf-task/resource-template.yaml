@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: bp-resource-template
+spec:
+  entrypoint: resource-template
+  templates:
+    - name: resource-template
+      steps:
+        - - name: step1
+            template: create-pod
+        - - name: step2
+            template: delete-pod
+
+    - name: create-pod
+      resource:
+        action: create
+        manifest: |
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: my-pod
+          spec:
+            containers:
+              - name: con1
+                image: nginx:latest
+                ports:
+                  - containerPort: 80
+
+    - name: delete-pod
+      resource:
+        action: delete
+        manifest: |
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: my-pod
+

@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata: 
+    name: bp-resource-templ
+spec:
+    entrypoint: resource-templ
+    templates:
+        - name: resource-templ
+          steps:
+            - - name: step1
+                template: create-pod
+        - name: create-pod
+          resource:
+            action: create
+            manifest: |
+               apiVersion: v1
+               kind: Pod 
+               metadata:
+                 name: my-pod1
+               spec:
+                 containers:
+                   - name: con1
+                     image: nginx:latest 
+                     ports:
+                      - containerPort: 80

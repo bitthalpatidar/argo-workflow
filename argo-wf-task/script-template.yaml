@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+    name: bp-script-template
+spec:
+    entrypoint: script-template
+    templates:
+        - name: script-template
+          steps:
+            - - name: step1
+                template: hello-world
+            - - name: step2
+                template: get-sum
+        - name: hello-world
+          script:
+            image: python:3.8-slim
+            command: [python]
+            source: |
+              print("hi team, this is script template")
+        - name: get-sum
+          script:
+            image: python:3.8-slim
+            command: [python]
+            source: |
+              a=5
+              b=6
+              sum= a+b 
+              print("sum of a+b is =",sum)
